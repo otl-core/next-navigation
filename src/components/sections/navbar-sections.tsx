@@ -4,7 +4,7 @@ import {
   HeaderNavigationItem,
   HeaderSection,
 } from "@otl-core/cms-types";
-import React, { useMemo } from "react";
+import React from "react";
 import { resolveItemVisibility } from "../../lib/navigation.utils";
 import { MobileMenuToggle } from "../mobile/mobile-menu-toggle";
 import { NavigationItem } from "./navigation-item";
@@ -38,13 +38,11 @@ export const NavbarSections: React.FC<NavbarSectionProps> = ({
   mobileMenuId,
 }) => {
   // Check if this section contains a logo
-  const hasLogo = useMemo(() => {
-    return section?.items?.some(
-      (item: HeaderNavigationItem) => item.type === "logo",
-    );
-  }, [section.items]);
+  const hasLogo = section?.items?.some(
+    (item: HeaderNavigationItem) => item.type === "logo",
+  );
 
-  const sectionStyle: React.CSSProperties = useMemo(() => {
+  const sectionStyle: React.CSSProperties = (() => {
     let flexValue = section.flex;
 
     // Smart flex handling for better logo and navigation behavior
@@ -66,17 +64,17 @@ export const NavbarSections: React.FC<NavbarSectionProps> = ({
       // For non-logo sections, ensure they can shrink below content width
       ...(!hasLogo ? { minWidth: 0 } : {}),
     };
-  }, [section, hasLogo]);
+  })();
 
   // Check if section should be hidden when empty
-  const shouldHide = useMemo(() => {
+  const shouldHide = (() => {
     if (!section.hideWhenEmpty) return false;
 
     // Never hide if there's a logo - logos are always visible
-    const hasLogo = section.items?.some(
+    const sectionHasLogo = section.items?.some(
       (item: HeaderNavigationItem) => item.type === "logo",
     );
-    if (hasLogo) return false;
+    if (sectionHasLogo) return false;
 
     // Never hide if there are items with visibility: navbar-only or both - they're always visible
     const hasAlwaysVisibleItems = section.items?.some(
@@ -101,10 +99,10 @@ export const NavbarSections: React.FC<NavbarSectionProps> = ({
     if (isTogglerSection) return false;
 
     return true;
-  }, [section.hideWhenEmpty, section.items, isTogglerSection]);
+  })();
 
   // Apply the same visibility class as items if hideWhenEmpty is enabled
-  const sectionVisibilityClass = useMemo(() => {
+  const sectionVisibilityClass = (() => {
     if (!section.hideWhenEmpty) return "";
 
     // Check if there are any items that are always visible (logos or navbar-only/both)
@@ -120,7 +118,7 @@ export const NavbarSections: React.FC<NavbarSectionProps> = ({
 
     // If all items collapse, apply the same visibility class
     return itemsShowClass;
-  }, [section.hideWhenEmpty, section.items, itemsShowClass]);
+  })();
 
   if (shouldHide) {
     return null;
