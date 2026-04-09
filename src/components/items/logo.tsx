@@ -15,11 +15,11 @@ function LogoContent({ navigation, siteName, logoTextColor }: LogoProps) {
         alt={navigation.logo.alt || siteName}
         width={navigation.logo.width}
         height={navigation.logo.height}
-        className="h-auto w-auto"
         style={{
           height: navigation.logo.height
             ? `${navigation.logo.height}px`
             : "40px",
+          width: navigation.logo.width ? `${navigation.logo.width}px` : "auto",
         }}
       />
     );
