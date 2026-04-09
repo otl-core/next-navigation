@@ -13,14 +13,7 @@ function LogoContent({ navigation, siteName, logoTextColor }: LogoProps) {
       <img
         src={navigation.logo.url}
         alt={navigation.logo.alt || siteName}
-        width={navigation.logo.width}
-        height={navigation.logo.height}
-        style={{
-          height: navigation.logo.height
-            ? `${navigation.logo.height}px`
-            : "40px",
-          width: navigation.logo.width ? `${navigation.logo.width}px` : "auto",
-        }}
+        className="navigation-logo-img"
       />
     );
   }

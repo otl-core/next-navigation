@@ -134,6 +134,29 @@ function generateResponsiveCustomProps(
   return css;
 }
 
+/**
+ * Normalize a logo size value (responsive, plain string, or legacy
+ * numeric pixels) into a ResponsiveValue<string>.
+ */
+function normalizeLogoSize(
+  value: ResponsiveValue<string> | number | undefined,
+): ResponsiveValue<string> | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value === "number") return { base: `${value}px` };
+  if (typeof value === "string") return { base: value };
+  return value;
+}
+
+function generateLogoCSS(id: string, navigation: HeaderConfig): string[] {
+  if (!navigation.logo?.url) return [];
+  const width = normalizeLogoSize(navigation.logo.width) ?? { base: "auto" };
+  const height = normalizeLogoSize(navigation.logo.height) ?? { base: "40px" };
+  return generateResponsiveCustomProps(`navbar-${id} .navigation-logo-img`, {
+    width,
+    height,
+  });
+}
+
 export function generateNavigationCSS(
   id: string,
   navigation: HeaderConfig,
@@ -142,6 +165,8 @@ export function generateNavigationCSS(
 ): string {
   const cssBlocks: (string | null)[] = [];
   const isSameLayer = navigation.style?.dropdown?.layer === "same";
+
+  cssBlocks.push(...generateLogoCSS(id, navigation));
 
   // Margins are now applied inline, no CSS generation needed
 
