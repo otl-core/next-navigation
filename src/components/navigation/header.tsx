@@ -58,11 +58,7 @@ export const Header: React.FC<NavigationHeaderProps> = ({
 }) => {
   const isFixed = navigation.style?.position === "fixed";
   const containerBehavior = navigation.style?.container || "edged";
-  const safeZone = navigation.style?.safeZone;
-  const safeZoneHeight =
-    typeof safeZone === "object" && "base" in safeZone
-      ? safeZone.base
-      : safeZone || "0";
+  const hasSafeZone = !!navigation.style?.safeZone;
 
   const estimatedWidth = calculateNavigationWidth(
     navigation.sections || [],
@@ -130,13 +126,6 @@ export const Header: React.FC<NavigationHeaderProps> = ({
   const linkStyle: React.CSSProperties = {
     ...(resolvedColors.linkColor && { color: resolvedColors.linkColor }),
   };
-
-  // Extract margin for inline styles
-  const marginValue =
-    typeof navigation.style?.layout?.margin === "object" &&
-    "base" in navigation.style.layout.margin
-      ? navigation.style.layout.margin.base
-      : navigation.style?.layout?.margin || "0";
 
   const sortedSections = [...(navigation.sections || [])].sort(
     (a, b) => a.order - b.order,
@@ -267,12 +256,12 @@ export const Header: React.FC<NavigationHeaderProps> = ({
     const headerContent = (
       <NavigationHeaderWrapper
         className={cn(
+          `header-${id}`,
           "relative",
           isFixed
             ? "fixed top-0 left-0 right-0 z-50"
             : "absolute top-0 left-0 right-0 z-50",
         )}
-        style={{ margin: marginValue }}
         data-container={containerBehavior}
       >
         {navbarWithContainer}
@@ -284,10 +273,9 @@ export const Header: React.FC<NavigationHeaderProps> = ({
         {styles && <style>{styles}</style>}
         <NavigationProvider>
           {headerContent}
-          {safeZoneHeight && safeZoneHeight !== "0" && (
+          {hasSafeZone && (
             <div
-              className="header-safe-zone bg-surface"
-              style={{ height: safeZoneHeight }}
+              className={`header-safe-zone-${id} bg-surface`}
               aria-hidden="true"
             />
           )}
@@ -369,12 +357,12 @@ export const Header: React.FC<NavigationHeaderProps> = ({
   const headerContent = (
     <NavigationHeaderWrapper
       className={cn(
+        `header-${id}`,
         "relative",
         isFixed
           ? "fixed top-0 left-0 right-0 z-50"
           : "absolute top-0 left-0 right-0 z-50",
       )}
-      style={{ margin: marginValue }}
       data-container={containerBehavior}
     >
       {navbarWithContainer}
@@ -386,10 +374,9 @@ export const Header: React.FC<NavigationHeaderProps> = ({
       {styles && <style>{styles}</style>}
       <NavigationProvider>
         {headerContent}
-        {safeZoneHeight && safeZoneHeight !== "0" && (
+        {hasSafeZone && (
           <div
-            className="header-safe-zone bg-surface"
-            style={{ height: safeZoneHeight }}
+            className={`header-safe-zone-${id} bg-surface`}
             aria-hidden="true"
           />
         )}

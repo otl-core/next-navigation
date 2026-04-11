@@ -24,6 +24,7 @@ import {
   generateScrollbarStyles,
   generateToggleIconAnimations,
   minifyCSS,
+  normalizeResponsiveValue,
 } from "@otl-core/style-utils";
 
 /**
@@ -168,7 +169,19 @@ export function generateNavigationCSS(
 
   cssBlocks.push(...generateLogoCSS(id, navigation));
 
-  // Margins are now applied inline, no CSS generation needed
+  if (navigation.style?.layout?.margin) {
+    const headerMarginCSS = generateResponsiveSpacingCSS(`header-${id}`, {
+      margin: navigation.style.layout.margin,
+    });
+    if (headerMarginCSS) cssBlocks.push(headerMarginCSS);
+  }
+
+  if (navigation.style?.safeZone) {
+    const safeZoneCSS = generateResponsiveSpacingCSS(`header-safe-zone-${id}`, {
+      height: navigation.style.safeZone,
+    });
+    if (safeZoneCSS) cssBlocks.push(safeZoneCSS);
+  }
 
   if (navigation.style) {
     if (isSameLayer) {
@@ -203,6 +216,38 @@ export function generateNavigationCSS(
           "--btn-font-lg": btnFontSize.lg,
         }),
       );
+    }
+  }
+
+  // Generate responsive offset margin for all dropdowns
+  if (navigation.style?.dropdown?.offset) {
+    const offset = navigation.style.dropdown.offset;
+    const yNorm = normalizeResponsiveValue(offset.y);
+    const leftNorm = normalizeResponsiveValue(offset.left);
+    const rightNorm = normalizeResponsiveValue(offset.right);
+    const breakpoints = ["base", "sm", "md", "lg", "xl", "2xl"] as const;
+    const compositeMargin: Record<string, string> = {};
+    for (const bp of breakpoints) {
+      const top = yNorm[bp] || (bp === "base" ? "0" : undefined);
+      const left = leftNorm[bp] || (bp === "base" ? "0" : undefined);
+      const right = rightNorm[bp] || (bp === "base" ? "0" : undefined);
+      if (top !== undefined || left !== undefined || right !== undefined) {
+        compositeMargin[bp] = `${top || "0"} ${right || "0"} 0 ${left || "0"}`;
+      }
+    }
+    if (Object.keys(compositeMargin).length > 0) {
+      const marginValue = compositeMargin.base
+        ? Object.keys(compositeMargin).length === 1
+          ? compositeMargin.base
+          : compositeMargin
+        : compositeMargin;
+      dropdownIds.forEach((dropdownId) => {
+        const offsetCSS = generateResponsiveSpacingCSS(
+          `navigation-dropdown-${dropdownId}`,
+          { margin: marginValue as ResponsiveValue<string> },
+        );
+        if (offsetCSS) cssBlocks.push(offsetCSS);
+      });
     }
   }
 

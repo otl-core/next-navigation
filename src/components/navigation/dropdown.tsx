@@ -8,7 +8,6 @@ import type {
   HeaderNavigationItemDropdownConfig,
 } from "@otl-core/cms-types";
 import { HeaderDropdownContent } from "@otl-core/cms-types";
-import { getBreakpointValue } from "@otl-core/cms-utils";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { useNavigation } from "../../context/navigation-context";
@@ -216,21 +215,6 @@ export function NavigationDropdown({
               useSameLayerMode,
               navigation.style?.dropdown?.layer,
             ),
-            marginTop: navigation.style?.dropdown?.offset?.y
-              ? getBreakpointValue(navigation.style.dropdown.offset.y, "base")
-              : "0",
-            marginLeft: navigation.style?.dropdown?.offset?.left
-              ? getBreakpointValue(
-                  navigation.style.dropdown.offset.left,
-                  "base",
-                )
-              : "0",
-            marginRight: navigation.style?.dropdown?.offset?.right
-              ? getBreakpointValue(
-                  navigation.style.dropdown.offset.right,
-                  "base",
-                )
-              : "0",
           }}
         >
           <div
