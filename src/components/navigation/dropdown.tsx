@@ -307,7 +307,7 @@ export function NavigationDropdown({
                 return (
                   <nav
                     key={panelIndex}
-                    className={`flex flex-col p-2 dropdown-content-${dropdownId}`}
+                    className={`flex flex-col ${useSameLayerMode ? "" : "p-2"} dropdown-content-${dropdownId}`}
                     style={{
                       ...linkHoverStyle,
                       width: "100%",
