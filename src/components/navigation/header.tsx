@@ -41,6 +41,7 @@ const HIDE_CLASSES = {
 interface NavigationHeaderProps {
   navigation: HeaderConfig;
   site: Site;
+  locale?: string;
   className?: string;
   siteName?: string;
   id?: string;
@@ -52,6 +53,7 @@ export const Header: React.FC<NavigationHeaderProps> = ({
     default_locale: "en",
     supported_locales: ["en"],
   } as Site,
+  locale,
   className = "",
   siteName: _siteName = "Logo",
   id = "default",
@@ -204,6 +206,7 @@ export const Header: React.FC<NavigationHeaderProps> = ({
           itemsShowClass="hidden" // All items hidden by default in minimal mode
           togglerHideClass="" // Always show toggler in minimal mode
           site={site}
+          locale={locale}
           mobileMenuId={`mobile-menu-${id}`}
           containerContent={containerBehavior === "edged"}
           isSameLayer={isSameLayer}
@@ -297,6 +300,7 @@ export const Header: React.FC<NavigationHeaderProps> = ({
         itemsShowClass={showClass}
         togglerHideClass={hideClass}
         site={site}
+        locale={locale}
         mobileMenuId={`mobile-menu-${id}`}
         containerContent={containerBehavior === "edged"}
         isSameLayer={isSameLayer}

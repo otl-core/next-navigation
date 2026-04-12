@@ -24,6 +24,7 @@ interface NavbarSectionProps {
   togglerHideClass?: string;
   isTogglerSection?: boolean;
   site: Site;
+  locale?: string;
   mobileMenuId?: string;
 }
 
@@ -35,6 +36,7 @@ export const NavbarSections: React.FC<NavbarSectionProps> = ({
   togglerHideClass,
   isTogglerSection,
   site,
+  locale,
   mobileMenuId,
 }) => {
   // Check if this section contains a logo
@@ -139,6 +141,7 @@ export const NavbarSections: React.FC<NavbarSectionProps> = ({
             resolvedColors={resolvedColors}
             itemsShowClass={itemsShowClass}
             site={site}
+            locale={locale}
           />
         );
       })}

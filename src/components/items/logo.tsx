@@ -5,6 +5,8 @@ interface LogoProps {
   navigation: HeaderConfig;
   siteName: string;
   logoTextColor?: string;
+  locale?: string;
+  defaultLocale?: string;
 }
 
 function LogoContent({ navigation, siteName, logoTextColor }: LogoProps) {
@@ -29,9 +31,16 @@ function LogoContent({ navigation, siteName, logoTextColor }: LogoProps) {
   );
 }
 
-export function Logo({ navigation, siteName, logoTextColor }: LogoProps) {
+export function Logo({
+  navigation,
+  siteName,
+  logoTextColor,
+  locale,
+  defaultLocale,
+}: LogoProps) {
+  const href = locale && locale !== defaultLocale ? `/${locale}` : "/";
   return (
-    <Link href="/" className="flex-shrink-0">
+    <Link href={href} className="flex-shrink-0">
       <LogoContent
         navigation={navigation}
         siteName={siteName}

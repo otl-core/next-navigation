@@ -14,6 +14,7 @@ interface NavbarProps {
   togglerHideClass: string;
   togglerSectionId: string;
   site: Site;
+  locale?: string;
   mobileMenuId?: string;
   containerContent?: boolean;
   isSameLayer?: boolean;
@@ -30,6 +31,7 @@ export function Navbar({
   togglerHideClass,
   togglerSectionId,
   site,
+  locale,
   mobileMenuId,
   containerContent = false,
   isSameLayer = false,
@@ -47,6 +49,7 @@ export function Navbar({
       key={section.id}
       section={section}
       site={site}
+      locale={locale}
       navigation={navigation}
       resolvedColors={resolvedColors}
       itemsShowClass={itemsShowClass}

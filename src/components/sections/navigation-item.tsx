@@ -27,6 +27,7 @@ interface NavigationItemProps {
   resolvedColors: Record<string, string | undefined>;
   itemsShowClass?: string;
   site: Site;
+  locale?: string;
 }
 
 // Map button variants to Button component variants
@@ -53,6 +54,7 @@ export const NavigationItem: React.FC<NavigationItemProps> = ({
   resolvedColors,
   itemsShowClass,
   site,
+  locale,
 }) => {
   const label = getLocalizedString(item.label, site);
 
@@ -66,6 +68,8 @@ export const NavigationItem: React.FC<NavigationItemProps> = ({
         navigation={navigation}
         siteName={navigation.logo.alt || "Logo"}
         logoTextColor={resolvedColors.logoText}
+        locale={locale}
+        defaultLocale={site.default_locale}
       />
     );
   }
