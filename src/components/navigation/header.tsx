@@ -19,6 +19,7 @@ import {
   sectionsToDropdownContent,
 } from "../../lib/navigation.utils";
 import { NavigationHeaderWrapper } from "../mobile/navigation-header-wrapper";
+import { ScrollRestoration } from "../scroll-restoration";
 import { NavigationDropdown } from "./dropdown";
 import { Navbar } from "./navbar";
 
@@ -275,6 +276,7 @@ export const Header: React.FC<NavigationHeaderProps> = ({
       <>
         {styles && <style>{styles}</style>}
         <NavigationProvider>
+          <ScrollRestoration />
           {headerContent}
           {hasSafeZone && (
             <div
@@ -377,6 +379,7 @@ export const Header: React.FC<NavigationHeaderProps> = ({
     <>
       {styles && <style>{styles}</style>}
       <NavigationProvider>
+        <ScrollRestoration />
         {headerContent}
         {hasSafeZone && (
           <div
