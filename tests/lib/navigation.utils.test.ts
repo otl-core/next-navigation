@@ -3,6 +3,7 @@ import {
   calculateNavigationWidth,
   getBreakpointForWidth,
   getLocalizedString,
+  parseMarkdownToHTML,
   resolveDropdownColor,
   sectionsToDropdownContent,
 } from "../../src/lib/navigation.utils";
@@ -501,6 +502,47 @@ describe("Navigation Utils", () => {
     it("should return first available as last resort", () => {
       const value = { zh: "你好" };
       expect(getLocalizedString(value)).toBe("你好");
+    });
+  });
+
+  describe("parseMarkdownToHTML", () => {
+    it("should parse bold text", () => {
+      expect(parseMarkdownToHTML("**bold**")).toBe(
+        "<p><strong>bold</strong></p>\n",
+      );
+    });
+
+    it("should parse bold text followed by plain text without space", () => {
+      expect(parseMarkdownToHTML("**help**me")).toBe(
+        "<p><strong>help</strong>me</p>\n",
+      );
+    });
+
+    it("should parse italic text", () => {
+      expect(parseMarkdownToHTML("*italic*")).toBe("<p><em>italic</em></p>\n");
+    });
+
+    it("should parse bold+italic mixed with plain text", () => {
+      expect(parseMarkdownToHTML("**bold***italic*plain")).toBe(
+        "<p><strong>bold</strong><em>italic</em>plain</p>\n",
+      );
+    });
+
+    it("should transform headings to divs with classes", () => {
+      expect(parseMarkdownToHTML("# Heading")).toBe(
+        '<div class="h1">Heading</div>\n',
+      );
+      expect(parseMarkdownToHTML("## Sub")).toBe('<div class="h2">Sub</div>\n');
+    });
+
+    it("should parse bold text with punctuation before closing marker", () => {
+      expect(parseMarkdownToHTML("**krippner:**digital")).toBe(
+        "<p><strong>krippner:</strong>digital</p>\n",
+      );
+    });
+
+    it("should handle plain text without markdown", () => {
+      expect(parseMarkdownToHTML("hello world")).toBe("<p>hello world</p>\n");
     });
   });
 });

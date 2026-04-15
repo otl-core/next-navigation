@@ -44,7 +44,7 @@ export function NavigationProvider({
     [],
   );
 
-  // Close dropdown on route change (render-time derivation, not an effect)
+  // Close dropdown on pathname change (render-time derivation, not an effect)
   const prevPathname = useRef(pathname);
   if (pathname !== prevPathname.current) {
     prevPathname.current = pathname;
@@ -52,6 +52,23 @@ export function NavigationProvider({
       setActiveDropdown(null);
     }
   }
+
+  // Close on hash and query-string changes — Next.js's usePathname only
+  // tracks the path segment, so ?query and #hash changes need a browser-
+  // level listener.  We avoid useSearchParams() here because it requires
+  // a <Suspense> boundary which customers may not have.
+  useEffect(() => {
+    const close = () => setActiveDropdown(null);
+
+    // hashchange fires for #fragment navigation
+    window.addEventListener("hashchange", close);
+    // popstate fires for browser back/forward (covers query changes too)
+    window.addEventListener("popstate", close);
+    return () => {
+      window.removeEventListener("hashchange", close);
+      window.removeEventListener("popstate", close);
+    };
+  }, []);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
